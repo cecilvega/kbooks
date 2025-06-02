@@ -1,0 +1,22 @@
+project:
+  output-dir: "OUTPUTS"
+format:
+  html:
+    theme: lux
+    css: komatsu.css
+    echo: false
+    warning: false
+    message: false
+    embed-resources: true
+    number-sections: true
+    toc: true
+  pdf:
+    documentclass: scrreprt
+    papersize: letter
+    toc: true
+    toc-title: Contents
+    number-sections: true
+    colorlinks: true
+    echo: false
+    warning: false
+    message: false
