@@ -1,0 +1,39 @@
+% Packages for footer
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{lastpage}
+
+% Table handling packages
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{adjustbox}
+\usepackage{graphicx}  % For resizebox
+
+% Set up fancy headers and footers
+\pagestyle{fancy}
+\fancyhf{} % Clear all header and footer fields
+
+% Header (optional)
+\fancyhead[L]{\small DANTOTSU - Departamento Confiabilidad}
+\fancyhead[R]{\small \today}
+
+% Footer
+\fancyfoot[L]{
+    % Adjust path to your logo file - reduced from 0.4in to 0.25in
+    \includegraphics[height=0.25in]{komatsu-logo.png}
+}
+\fancyfoot[C]{\small Confidential - Internal Use Only}
+\fancyfoot[R]{\small Page \thepage\ of \pageref{LastPage}}
+
+% Adjust footer rule
+\renewcommand{\footrulewidth}{0.4pt}
+
+% Ensure first page also has the footer
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \fancyfoot[L]{\includegraphics[height=0.25in]{komatsu-logo.png}}
+    \fancyfoot[C]{\small Confidential - Internal Use Only}
+    \fancyfoot[R]{\small Page \thepage\ of \pageref{LastPage}}
+    \renewcommand{\footrulewidth}{0.4pt}
+}

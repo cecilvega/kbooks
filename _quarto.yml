@@ -1,22 +1,29 @@
 project:
   output-dir: "OUTPUTS"
 format:
-  html:
-    theme: lux
-    css: komatsu.css
-    echo: false
-    warning: false
-    message: false
-    embed-resources: true
-    number-sections: true
-    toc: true
   pdf:
     documentclass: scrreprt
     papersize: letter
+    geometry:
+      - top=1.25in
+      - bottom=1.25in  # Reduced since logo is smaller
+      - left=1in
+      - right=1in
     toc: true
     toc-title: Contents
-    number-sections: true
+    number-sections: true  # Fixed typo
     colorlinks: true
     echo: false
     warning: false
     message: false
+    include-in-header: header.tex
+    keep-tex: true  # Optional: keep LaTeX file for debugging
+#  html:
+#    theme: lux
+#    css: komatsu.css
+#    echo: false
+#    warning: false
+#    message: false
+#    embed-resources: true
+#    number-sections: true
+#    toc: true

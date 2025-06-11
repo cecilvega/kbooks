@@ -6,27 +6,27 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # ============================================================================
-# KOMATSU THEME TEMPLATE - Save this section for reuse
+# KOMATSU THEME CONFIGURATION
 # ============================================================================
 
 # Define Komatsu color palette
 KOMATSU_COLORS = {
-    "primary_blue": "#003F87",  # Deep blue from the image
-    "primary_yellow": "#FFCC00",  # Yellow from the image
-    "light_blue": "#0066CC",  # Lighter blue for contrast
-    "gray": "#E5E5E5",  # Light gray for background
-    "text_primary": "#333333",  # Main text color
-    "text_secondary": "#666666",  # Secondary text color
-    "grid_color": "#E0E0E0",  # Grid line color
+    "primary_blue": "#003F87",
+    "primary_yellow": "#FFCC00",
+    "light_blue": "#0066CC",
+    "gray": "#E5E5E5",
+    "text_primary": "#333333",
+    "text_secondary": "#666666",
+    "grid_color": "#E0E0E0",
 }
 
-# Extended color palette for multiple components
+# Extended color palette for multiple series
 COMPONENT_COLORS = [
     "#003F87",  # Deep blue
     "#FFCC00",  # Yellow
     "#333333",  # Dark gray
     "#0066CC",  # Light blue
-    "#9370DB",  # Medium purple (similar to the image)
+    "#9370DB",  # Medium purple
     "#FFA500",  # Orange
     "#808080",  # Gray
     "#4169E1",  # Royal blue
@@ -34,42 +34,439 @@ COMPONENT_COLORS = [
 
 
 def theme_komatsu(figure_size=(14, 7)):
-    """
-    Komatsu corporate theme for plotnine plots.
-    Clean, professional appearance with company colors.
-
-    Args:
-        figure_size: tuple of (width, height) in inches
-
-    Returns:
-        plotnine theme object
-    """
-    return p9.theme_bw() + p9.theme(  # Start with clean base
+    """Komatsu corporate theme for plotnine plots"""
+    return p9.theme_bw() + p9.theme(
         figure_size=figure_size,
-        # Text elements
         text=p9.element_text(family="Arial", color=KOMATSU_COLORS["text_primary"]),
-        axis_text_x=p9.element_text(rotation=0, ha="center", size=10),  # Changed rotation to 0 for months
+        axis_text_x=p9.element_text(rotation=0, ha="center", size=10),
         axis_text_y=p9.element_text(size=10),
         axis_title=p9.element_text(size=12, weight="bold"),
-        # Title and subtitle
         plot_title=p9.element_text(size=18, weight="bold", color=KOMATSU_COLORS["primary_blue"]),
         plot_subtitle=p9.element_text(size=12, style="italic", color=KOMATSU_COLORS["text_secondary"]),
-        # Legend
-        legend_position="right",  # Changed to right like in the image
+        legend_position="right",
         legend_title=p9.element_text(weight="bold", size=11),
         legend_text=p9.element_text(size=10),
         legend_background=p9.element_rect(fill="white", color="none"),
-        # Grid and background
-        panel_grid_major_x=p9.element_blank(),  # Remove vertical grid
-        panel_grid_minor=p9.element_blank(),  # Remove minor grid
+        panel_grid_major_x=p9.element_blank(),
+        panel_grid_minor=p9.element_blank(),
         panel_grid_major_y=p9.element_line(color=KOMATSU_COLORS["grid_color"], size=0.5),
         panel_border=p9.element_rect(color=KOMATSU_COLORS["text_primary"], size=1),
-        # Background colors
         plot_background=p9.element_rect(fill="white"),
         panel_background=p9.element_rect(fill="white"),
     )
 
 
 # ============================================================================
-# DATA PROCESSING
+# SIMPLE BAR PLOT
 # ============================================================================
+
+
+def komatsu_bar_plot(
+    df,
+    x,
+    y,
+    fill=None,
+    title="",
+    subtitle="",
+    x_label=None,
+    y_label=None,
+    legend_title=None,
+    color_palette=None,
+    figure_size=(14, 7),
+    bar_width=0.8,
+    show_values=False,
+    value_format="{:.0f}",
+    x_axis_rotation=0,
+):
+    """
+    Create a simple bar plot with Komatsu theme
+
+    Args:
+        df: DataFrame (pandas or polars - will convert)
+        x: Column name for x-axis
+        y: Column name for y-axis values
+        fill: Column name for bar colors (optional)
+        title: Plot title
+        subtitle: Plot subtitle
+        x_label: X-axis label (defaults to column name)
+        y_label: Y-axis label (defaults to column name)
+        legend_title: Legend title (defaults to fill column name)
+        color_palette: List of colors or dict mapping
+        figure_size: Tuple of (width, height)
+        bar_width: Width of bars (0-1)
+        show_values: Show value labels on bars
+        value_format: Format string for values
+        x_axis_rotation: Rotation angle for x-axis labels
+
+    Returns:
+        plotnine plot object
+    """
+    # Convert polars to pandas if needed
+    plot_df = df.to_pandas() if hasattr(df, "to_pandas") else df
+
+    # Set defaults
+    x_label = x_label or x
+    y_label = y_label or y
+
+    # Base plot
+    if fill:
+        plot = p9.ggplot(plot_df, p9.aes(x=x, y=y, fill=fill))
+        legend_title = legend_title or fill
+    else:
+        plot = p9.ggplot(plot_df, p9.aes(x=x, y=y))
+
+    # Add bars
+    plot = plot + p9.geom_col(width=bar_width)
+
+    # Add value labels if requested
+    if show_values:
+        if fill:
+            plot = plot + p9.geom_text(p9.aes(label=y), format_string=value_format, va="bottom", size=8)
+        else:
+            plot = plot + p9.geom_text(p9.aes(label=y), format_string=value_format, va="bottom", size=8)
+
+    # Colors
+    if fill and color_palette:
+        if isinstance(color_palette, dict):
+            plot = plot + p9.scale_fill_manual(values=color_palette, name=legend_title)
+        else:
+            plot = plot + p9.scale_fill_manual(values=color_palette[: len(plot_df[fill].unique())], name=legend_title)
+    elif fill:
+        unique_vals = len(plot_df[fill].unique())
+        plot = plot + p9.scale_fill_manual(values=COMPONENT_COLORS[:unique_vals], name=legend_title)
+    else:
+        plot = plot + p9.geom_col(fill=KOMATSU_COLORS["primary_blue"])
+
+    # Labels and theme
+    plot = (
+        plot
+        + p9.labs(
+            title=title,
+            subtitle=subtitle,
+            x=x_label,
+            y=y_label,
+            caption=f'Generated: {datetime.now().strftime("%Y-%m-%d %H:%M")}',
+        )
+        + theme_komatsu(figure_size=figure_size)
+    )
+
+    # Adjust x-axis rotation if needed
+    if x_axis_rotation != 0:
+        plot = plot + p9.theme(axis_text_x=p9.element_text(rotation=x_axis_rotation, ha="right"))
+
+    return plot
+
+
+# ============================================================================
+# STACKED BAR PLOT
+# ============================================================================
+
+
+def komatsu_stacked_bar_plot(
+    df,
+    x,
+    y,
+    fill,
+    title="",
+    subtitle="",
+    x_label=None,
+    y_label=None,
+    legend_title=None,
+    color_palette=None,
+    figure_size=(14, 7),
+    bar_width=0.8,
+    x_axis_rotation=0,
+    position="stack",  # "stack" or "fill" (for 100% stacked)
+):
+    """
+    Create a stacked bar plot with Komatsu theme
+
+    Args:
+        df: DataFrame
+        x: Column name for x-axis
+        y: Column name for y-axis values
+        fill: Column name for stack segments
+        position: "stack" for regular stacked, "fill" for 100% stacked
+        (other args same as simple bar plot)
+
+    Returns:
+        plotnine plot object
+    """
+    # Convert polars to pandas if needed
+    plot_df = df.to_pandas() if hasattr(df, "to_pandas") else df
+
+    # Set defaults
+    x_label = x_label or x
+    y_label = y_label or y
+    legend_title = legend_title or fill
+
+    # Base plot
+    plot = p9.ggplot(plot_df, p9.aes(x=x, y=y, fill=fill)) + p9.geom_col(position=position, width=bar_width)
+
+    # Colors
+    if color_palette:
+        if isinstance(color_palette, dict):
+            plot = plot + p9.scale_fill_manual(values=color_palette, name=legend_title)
+        else:
+            unique_vals = len(plot_df[fill].unique())
+            plot = plot + p9.scale_fill_manual(values=color_palette[:unique_vals], name=legend_title)
+    else:
+        unique_vals = len(plot_df[fill].unique())
+        plot = plot + p9.scale_fill_manual(values=COMPONENT_COLORS[:unique_vals], name=legend_title)
+
+    # For 100% stacked, adjust y-axis
+    if position == "fill":
+        plot = plot + p9.scale_y_continuous(labels=lambda l: [f"{v:.0%}" for v in l])
+        y_label = y_label + " (%)" if "%" not in y_label else y_label
+
+    # Labels and theme
+    plot = (
+        plot
+        + p9.labs(
+            title=title,
+            subtitle=subtitle,
+            x=x_label,
+            y=y_label,
+            caption=f'Generated: {datetime.now().strftime("%Y-%m-%d %H:%M")}',
+        )
+        + theme_komatsu(figure_size=figure_size)
+    )
+
+    # Adjust x-axis rotation if needed
+    if x_axis_rotation != 0:
+        plot = plot + p9.theme(axis_text_x=p9.element_text(rotation=x_axis_rotation, ha="right"))
+
+    return plot
+
+
+# ============================================================================
+# LINE PLOT
+# ============================================================================
+
+
+def komatsu_line_plot(
+    df,
+    x,
+    y,
+    color=None,
+    title="",
+    subtitle="",
+    x_label=None,
+    y_label=None,
+    legend_title=None,
+    color_palette=None,
+    figure_size=(14, 7),
+    line_size=1.5,
+    show_points=True,
+    point_size=3,
+    smooth=False,
+    x_axis_rotation=0,
+):
+    """
+    Create a line plot with Komatsu theme
+
+    Args:
+        df: DataFrame
+        x: Column name for x-axis
+        y: Column name for y-axis values
+        color: Column name for line colors (optional)
+        line_size: Thickness of lines
+        show_points: Whether to show data points
+        point_size: Size of data points
+        smooth: Add smoothed trend line
+        (other args same as bar plot)
+
+    Returns:
+        plotnine plot object
+    """
+    # Convert polars to pandas if needed
+    plot_df = df.to_pandas() if hasattr(df, "to_pandas") else df
+
+    # Set defaults
+    x_label = x_label or x
+    y_label = y_label or y
+
+    # Base plot
+    if color:
+        plot = p9.ggplot(plot_df, p9.aes(x=x, y=y, color=color, group=color))
+        legend_title = legend_title or color
+    else:
+        plot = p9.ggplot(plot_df, p9.aes(x=x, y=y))
+
+    # Add line
+    plot = plot + p9.geom_line(size=line_size)
+
+    # Add points if requested
+    if show_points:
+        plot = plot + p9.geom_point(size=point_size)
+
+    # Add smooth if requested
+    if smooth:
+        plot = plot + p9.geom_smooth(method="loess", se=False, size=1, alpha=0.5)
+
+    # Colors
+    if color and color_palette:
+        if isinstance(color_palette, dict):
+            plot = plot + p9.scale_color_manual(values=color_palette, name=legend_title)
+        else:
+            unique_vals = len(plot_df[color].unique())
+            plot = plot + p9.scale_color_manual(values=color_palette[:unique_vals], name=legend_title)
+    elif color:
+        unique_vals = len(plot_df[color].unique())
+        plot = plot + p9.scale_color_manual(values=COMPONENT_COLORS[:unique_vals], name=legend_title)
+    else:
+        plot = plot + p9.geom_line(color=KOMATSU_COLORS["primary_blue"])
+        if show_points:
+            plot = plot + p9.geom_point(color=KOMATSU_COLORS["primary_blue"])
+
+    # Labels and theme
+    plot = (
+        plot
+        + p9.labs(
+            title=title,
+            subtitle=subtitle,
+            x=x_label,
+            y=y_label,
+            caption=f'Generated: {datetime.now().strftime("%Y-%m-%d %H:%M")}',
+        )
+        + theme_komatsu(figure_size=figure_size)
+    )
+
+    # Adjust x-axis rotation if needed
+    if x_axis_rotation != 0:
+        plot = plot + p9.theme(axis_text_x=p9.element_text(rotation=x_axis_rotation, ha="right"))
+
+    return plot
+
+
+# ============================================================================
+# HORIZONTAL BAR PLOT
+# ============================================================================
+
+
+def komatsu_horizontal_bar_plot(
+    df,
+    x,
+    y,
+    fill=None,
+    title="",
+    subtitle="",
+    x_label=None,
+    y_label=None,
+    legend_title=None,
+    color_palette=None,
+    figure_size=(14, 7),
+    bar_width=0.8,
+    show_values=False,
+    value_format="{:.0f}",
+):
+    """
+    Create a horizontal bar plot with Komatsu theme
+
+    Args:
+        Same as komatsu_bar_plot but creates horizontal bars
+
+    Returns:
+        plotnine plot object
+    """
+    # Use regular bar plot and flip coordinates
+    plot = komatsu_bar_plot(
+        df=df,
+        x=x,
+        y=y,
+        fill=fill,
+        title=title,
+        subtitle=subtitle,
+        x_label=x_label,
+        y_label=y_label,
+        legend_title=legend_title,
+        color_palette=color_palette,
+        figure_size=figure_size,
+        bar_width=bar_width,
+        show_values=show_values,
+        value_format=value_format,
+        x_axis_rotation=0,
+    )
+
+    # Flip coordinates
+    plot = plot + p9.coord_flip()
+
+    return plot
+
+
+# ============================================================================
+# EXAMPLE USAGE
+# ============================================================================
+
+if __name__ == "__main__":
+    # Create sample data
+    import numpy as np
+
+    # Sample data 1: Simple bar chart
+    df_simple = pl.DataFrame(
+        {
+            "component": ["Engine", "Transmission", "Final Drive", "Hydraulic Pump", "Alternator"],
+            "failures": [45, 32, 28, 19, 12],
+        }
+    )
+
+    # Sample data 2: Grouped/stacked data
+    df_grouped = pl.DataFrame(
+        {
+            "month": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"] * 3,
+            "warranty_type": ["Standard"] * 6 + ["Extended"] * 6 + ["Goodwill"] * 6,
+            "count": np.random.randint(10, 50, 18),
+        }
+    )
+
+    # Sample data 3: Time series
+    dates = pl.date_range(start=pl.date(2024, 1, 1), end=pl.date(2024, 12, 31), interval="1mo", eager=True)
+    df_time = pl.DataFrame(
+        {"date": dates, "availability": np.random.uniform(85, 95, len(dates)), "target": [90] * len(dates)}
+    )
+
+    # Example plots
+
+    # 1. Simple bar chart
+    plot1 = komatsu_bar_plot(
+        df_simple,
+        x="component",
+        y="failures",
+        title="Component Failures - Q4 2024",
+        subtitle="Total failures by component type",
+        y_label="Number of Failures",
+        show_values=True,
+    )
+
+    # 2. Stacked bar chart
+    plot2 = komatsu_stacked_bar_plot(
+        df_grouped,
+        x="month",
+        y="count",
+        fill="warranty_type",
+        title="Monthly Warranty Distribution",
+        subtitle="Warranty claims by type",
+        y_label="Number of Claims",
+    )
+
+    # 3. Line plot
+    plot3 = komatsu_line_plot(
+        df_time,
+        x="date",
+        y="availability",
+        title="Equipment Availability Trend",
+        subtitle="Monthly availability percentage",
+        y_label="Availability (%)",
+        show_points=True,
+    )
+
+    # 4. Horizontal bar chart
+    plot4 = komatsu_horizontal_bar_plot(
+        df_simple,
+        x="component",
+        y="failures",
+        title="Component Failures - Ranked",
+        subtitle="Failures by component (horizontal view)",
+        x_label="Number of Failures",
+        show_values=True,
+    )
