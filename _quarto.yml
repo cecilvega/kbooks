@@ -7,8 +7,8 @@ format:
     geometry:
       - top=1.25in
       - bottom=1.25in  # Reduced since logo is smaller
-      - left=1in
-      - right=1in
+      - left=0.5in
+      - right=0.5in
     toc: true
     toc-title: Contents
     number-sections: true  # Fixed typo

@@ -9,7 +9,7 @@ warnings.filterwarnings("ignore")
 # KOMATSU THEME CONFIGURATION
 # ============================================================================
 
-# Define Komatsu color palette
+# Komatsu color palette from theme_komatsu.py
 KOMATSU_COLORS = {
     "primary_blue": "#003F87",
     "primary_yellow": "#FFCC00",
@@ -19,7 +19,6 @@ KOMATSU_COLORS = {
     "text_secondary": "#666666",
     "grid_color": "#E0E0E0",
 }
-
 # Extended color palette for multiple series
 COMPONENT_COLORS = [
     "#003F87",  # Deep blue
@@ -33,26 +32,53 @@ COMPONENT_COLORS = [
 ]
 
 
-def theme_komatsu(figure_size=(14, 7)):
-    """Komatsu corporate theme for plotnine plots"""
-    return p9.theme_bw() + p9.theme(
+# Enhanced Theme Komatsu function
+def theme_komatsu(figure_size=(7, 5)):
+    """Enhanced Komatsu corporate theme for plotnine plots"""
+    return p9.theme_minimal() + p9.theme(
         figure_size=figure_size,
-        text=p9.element_text(family="Arial", color=KOMATSU_COLORS["text_primary"]),
-        axis_text_x=p9.element_text(rotation=0, ha="center", size=10),
-        axis_text_y=p9.element_text(size=10),
-        axis_title=p9.element_text(size=12, weight="bold"),
-        plot_title=p9.element_text(size=18, weight="bold", color=KOMATSU_COLORS["primary_blue"]),
-        plot_subtitle=p9.element_text(size=12, style="italic", color=KOMATSU_COLORS["text_secondary"]),
-        legend_position="right",
-        legend_title=p9.element_text(weight="bold", size=11),
-        legend_text=p9.element_text(size=10),
-        legend_background=p9.element_rect(fill="white", color="none"),
+        # Text elements - BALANCED SIZES
+        text=p9.element_text(family="Arial", color=KOMATSU_COLORS["text_primary"], size=9),
+        axis_text_x=p9.element_text(rotation=0, ha="center", size=8, color="#333333"),
+        axis_text_y=p9.element_text(size=8, color="#333333"),
+        axis_title_x=p9.element_text(size=10, weight="bold", margin={"t": 8}),
+        axis_title_y=p9.element_text(size=10, weight="bold", margin={"r": 8}),
+        plot_title=p9.element_text(
+            size=14, weight="bold", color=KOMATSU_COLORS["primary_blue"], ha="left", margin={"b": 3}  # Increased
+        ),
+        plot_subtitle=p9.element_text(
+            size=10, color=KOMATSU_COLORS["text_secondary"], ha="left", margin={"b": 10}  # Increased
+        ),
+        # Legend - balanced size
+        legend_position="top",
+        legend_direction="horizontal",
+        legend_title=p9.element_blank(),
+        legend_text=p9.element_text(size=8),
+        legend_background=p9.element_blank(),
+        legend_key=p9.element_blank(),
+        legend_key_size=10,
+        legend_key_spacing=5,
+        legend_box_margin=0,
+        legend_margin=0,
+        legend_box_spacing=0,
+        # Grid
         panel_grid_major_x=p9.element_blank(),
         panel_grid_minor=p9.element_blank(),
-        panel_grid_major_y=p9.element_line(color=KOMATSU_COLORS["grid_color"], size=0.5),
-        panel_border=p9.element_rect(color=KOMATSU_COLORS["text_primary"], size=1),
-        plot_background=p9.element_rect(fill="white"),
+        panel_grid_major_y=p9.element_line(color="#E5E5E5", size=0.4, linetype="solid"),
+        # Panel
+        panel_border=p9.element_blank(),
         panel_background=p9.element_rect(fill="white"),
+        plot_background=p9.element_rect(fill="white", color="white"),
+        # Axis
+        axis_line_x=p9.element_line(color="#333333", size=0.5),
+        axis_line_y=p9.element_blank(),
+        axis_ticks=p9.element_line(color="#333333", size=0.5),
+        axis_ticks_length=4,
+        # Margins - balanced
+        plot_margin_top=0.08,
+        plot_margin_bottom=0.08,
+        plot_margin_left=0.08,
+        plot_margin_right=0.08,
     )
 
 
