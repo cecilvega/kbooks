@@ -1,5 +1,5 @@
 import polars as pl
-
+from datetime import datetime
 
 bp_df = pl.concat(
     [
@@ -97,6 +97,7 @@ component_data_raw_960E = [
     {"component_name": "modulo_potencia", "month": "2025-11-01", "cc_amount": 1},
     {"component_name": "modulo_potencia", "month": "2025-12-01", "cc_amount": 1},
     {"component_name": "modulo_potencia", "month": "2026-01-01", "cc_amount": 2},
+    {"component_name": "modulo_potencia", "month": "2026-02-01", "cc_amount": 1},
 ]
 
 component_data_raw_930E = [
@@ -114,17 +115,198 @@ component_data_raw_930E = [
     {"component_name": "suspension_trasera", "month": "2025-09-01", "cc_amount": 2},
 ]
 
-
-component_data_raw_spence = pl.read_excel(r"C:\Users\andmn\PycharmProjects\kbooks\component_data_raw_980E.xlsx")
+component_data_raw_980E = [
+    {"component_name": "cilindro_direccion", "changeout_week": "W23-2025"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W24-2025"},
+    {"component_name": "modulo_potencia", "changeout_week": "W25-2025"},
+    {"component_name": "motor_traccion", "changeout_week": "W25-2025"},
+    {"component_name": "suspension_trasera", "changeout_week": "W25-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W25-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W26-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W26-2025"},
+    {"component_name": "suspension_trasera", "changeout_week": "W26-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W27-2025"},
+    {"component_name": "cilindro_levante", "changeout_week": "W27-2025"},
+    {"component_name": "motor_traccion", "changeout_week": "W27-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W27-2025"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W28-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W28-2025"},
+    {"component_name": "suspension_trasera", "changeout_week": "W28-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W28-2025"},
+    {"component_name": "modulo_potencia", "changeout_week": "W29-2025"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W29-2025"},
+    {"component_name": "suspension_trasera", "changeout_week": "W29-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W29-2025"},
+    {"component_name": "motor_traccion", "changeout_week": "W30-2025"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W30-2025"},
+    {"component_name": "cilindro_levante", "changeout_week": "W30-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W30-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W30-2025"},
+    {"component_name": "modulo_potencia", "changeout_week": "W31-2025"},
+    {"component_name": "motor_traccion", "changeout_week": "W31-2025"},
+    {"component_name": "cilindro_levante", "changeout_week": "W31-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W31-2025"},
+    {"component_name": "suspension_trasera", "changeout_week": "W31-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W31-2025"},
+    {"component_name": "cilindro_levante", "changeout_week": "W32-2025"},
+    {"component_name": "suspension_trasera", "changeout_week": "W32-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W32-2025"},
+    {"component_name": "modulo_potencia", "changeout_week": "W33-2025"},
+    {"component_name": "motor_traccion", "changeout_week": "W33-2025"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W33-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W33-2025"},
+    {"component_name": "motor_traccion", "changeout_week": "W34-2025"},
+    {"component_name": "cilindro_levante", "changeout_week": "W34-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W34-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W34-2025"},
+    # Data from third image (W35-W36)
+    {"component_name": "motor_traccion", "changeout_week": "W35-2025"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W35-2025"},
+    {"component_name": "cilindro_levante", "changeout_week": "W35-2025"},
+    {"component_name": "suspension_trasera", "changeout_week": "W35-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W35-2025"},
+    {"component_name": "motor_traccion", "changeout_week": "W36-2025"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W36-2025"},
+    {"component_name": "cilindro_levante", "changeout_week": "W36-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W36-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W36-2025"},
+    # Data from fourth image (W37-W38)
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W37-2025"},
+    {"component_name": "suspension_trasera", "changeout_week": "W37-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W37-2025"},
+    {"component_name": "modulo_potencia", "changeout_week": "W38-2025"},
+    {"component_name": "motor_traccion", "changeout_week": "W38-2025"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W38-2025"},
+    {"component_name": "cilindro_levante", "changeout_week": "W38-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W38-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W38-2025"},
+    # Data from fifth image (W39-W40)
+    {"component_name": "cilindro_direccion", "changeout_week": "W39-2025"},
+    {"component_name": "cilindro_levante", "changeout_week": "W39-2025"},
+    {"component_name": "suspension_trasera", "changeout_week": "W39-2025"},
+    {"component_name": "modulo_potencia", "changeout_week": "W40-2025"},
+    {"component_name": "motor_traccion", "changeout_week": "W40-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W40-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W40-2025"},
+    # Data from sixth image (W41-W42)
+    {"component_name": "cilindro_levante", "changeout_week": "W41-2025"},
+    {"component_name": "suspension_trasera", "changeout_week": "W41-2025"},
+    {"component_name": "cilindro_levante", "changeout_week": "W42-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W42-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W42-2025"},
+    # Data from seventh image (W43-W44)
+    {"component_name": "motor_traccion", "changeout_week": "W43-2025"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W43-2025"},
+    {"component_name": "cilindro_levante", "changeout_week": "W43-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W43-2025"},
+    {"component_name": "suspension_trasera", "changeout_week": "W43-2025"},
+    {"component_name": "motor_traccion", "changeout_week": "W44-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W44-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W44-2025"},
+    # Data from eighth image (W45-W46)
+    {"component_name": "motor_traccion", "changeout_week": "W45-2025"},
+    {"component_name": "suspension_trasera", "changeout_week": "W45-2025"},
+    {"component_name": "motor_traccion", "changeout_week": "W46-2025"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W46-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W46-2025"},
+    # Data from ninth image (W47-W48)
+    {"component_name": "modulo_potencia", "changeout_week": "W47-2025"},
+    {"component_name": "cilindro_levante", "changeout_week": "W47-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W47-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W48-2025"},
+    {"component_name": "blower_parrilla", "changeout_week": "W48-2025"},
+    # Data from tenth image (W49-W50)
+    {"component_name": "motor_traccion", "changeout_week": "W49-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W49-2025"},
+    {"component_name": "suspension_trasera", "changeout_week": "W49-2025"},
+    {"component_name": "motor_traccion", "changeout_week": "W50-2025"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W50-2025"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W50-2025"},
+    # Data from eleventh image (W52 & W01)
+    {"component_name": "modulo_potencia", "changeout_week": "W52-2025"},
+    {"component_name": "motor_traccion", "changeout_week": "W52-2025"},
+    {"component_name": "suspension_trasera", "changeout_week": "W52-2025"},
+    {"component_name": "cilindro_levante", "changeout_week": "W01-2026"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W01-2026"},
+    {"component_name": "suspension_trasera", "changeout_week": "W01-2026"},
+    {"component_name": "blower_parrilla", "changeout_week": "W01-2026"},
+    # Data from twelfth image (W02-W03)
+    {"component_name": "motor_traccion", "changeout_week": "W02-2026"},
+    {"component_name": "cilindro_levante", "changeout_week": "W02-2026"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W02-2026"},
+    {"component_name": "suspension_trasera", "changeout_week": "W02-2026"},
+    {"component_name": "blower_parrilla", "changeout_week": "W02-2026"},
+    {"component_name": "motor_traccion", "changeout_week": "W03-2026"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W03-2026"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W03-2026"},
+    # Data from thirteenth image (W04-W05)
+    {"component_name": "motor_traccion", "changeout_week": "W04-2026"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W04-2026"},
+    {"component_name": "suspension_trasera", "changeout_week": "W04-2026"},
+    {"component_name": "blower_parrilla", "changeout_week": "W04-2026"},
+    {"component_name": "motor_traccion", "changeout_week": "W05-2026"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W05-2026"},
+    {"component_name": "suspension_trasera", "changeout_week": "W05-2026"},
+    # Data from fourteenth image (W06-W07)
+    {"component_name": "cilindro_direccion", "changeout_week": "W06-2026"},
+    {"component_name": "suspension_trasera", "changeout_week": "W06-2026"},
+    {"component_name": "blower_parrilla", "changeout_week": "W06-2026"},
+    {"component_name": "motor_traccion", "changeout_week": "W07-2026"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W07-2026"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W07-2026"},  # Second entry in the same cell
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W07-2026"},
+    {"component_name": "blower_parrilla", "changeout_week": "W07-2026"},
+    # Data from fifteenth image (W08-W09)
+    {"component_name": "motor_traccion", "changeout_week": "W08-2026"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W08-2026"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W08-2026"},
+    {"component_name": "suspension_trasera", "changeout_week": "W08-2026"},
+    {"component_name": "motor_traccion", "changeout_week": "W09-2026"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W09-2026"},
+    {"component_name": "blower_parrilla", "changeout_week": "W09-2026"},
+    # Data from sixteenth image (W10-W11)
+    {"component_name": "motor_traccion", "changeout_week": "W10-2026"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W10-2026"},
+    {"component_name": "suspension_trasera", "changeout_week": "W10-2026"},
+    {"component_name": "blower_parrilla", "changeout_week": "W10-2026"},
+    {"component_name": "motor_traccion", "changeout_week": "W11-2026"},
+    {"component_name": "cilindro_direccion", "changeout_week": "W11-2026"},
+    {"component_name": "suspension_trasera", "changeout_week": "W11-2026"},
+    {"component_name": "blower_parrilla", "changeout_week": "W11-2026"},
+    # Data from seventeenth image (W12-W13)
+    {"component_name": "motor_traccion", "changeout_week": "W12-2026"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W12-2026"},
+    {"component_name": "motor_traccion", "changeout_week": "W13-2026"},
+    {"component_name": "conjunto_maza_suspension", "changeout_week": "W13-2026"},
+    {"component_name": "suspension_trasera", "changeout_week": "W13-2026"},
+    {"component_name": "blower_parrilla", "changeout_week": "W13-2026"},
+]
+component_data_raw_spence = pl.DataFrame(component_data_raw_980E)
 
 component_data_raw_spence = (
     component_data_raw_spence.with_columns(
-        # Create a 'month' column by converting the date string and truncating it to the month.
-        pl.col("changeout_date")
-        .cast(pl.String)
-        .str.to_date("%Y-%m-%d")
-        .dt.truncate("1mo")
-        .alias("month")
+        [
+            pl.col("changeout_week")
+            .str.extract(r"W(\d+)-(\d+)", 1)
+            .cast(pl.Int32)
+            .alias("week_num"),  # Extract week number
+            pl.col("changeout_week").str.extract(r"W(\d+)-(\d+)", 2).cast(pl.Int32).alias("year_num"),  # Extract year
+        ]
+    )
+    .with_columns(
+        [
+            # Create the date: January 1st + (week_number - 1) weeks
+            (pl.date(pl.col("year_num"), 1, 1) + pl.duration(weeks=pl.col("week_num") - 1)).alias("changeout_date")
+        ]
+    )
+    .drop(["week_num", "year_num"])  # Clean up temporary columns
+    .with_columns(
+        [
+            # Create a 'month' column by converting the date and truncating it to the month
+            pl.col("changeout_date")
+            .dt.truncate("1mo")
+            .alias("month")
+        ]
     )
     .group_by("component_name", "month")  # Group by component and the new month column.
     .agg(
